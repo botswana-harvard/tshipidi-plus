@@ -6,7 +6,7 @@ from edc_configuration.convert import localize
 from edc_consent.models import ConsentType
 from edc_content_type_map.models.content_type_map_helper import ContentTypeMapHelper
 
-study_start_datetime = datetime(2016, 5, 26, 0, 0, 0)
+study_start_datetime = datetime(2016, 5, 25, 0, 0, 0)
 study_end_datetime = datetime(2017, 5, 25, 0, 0, 0)
 
 

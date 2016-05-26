@@ -10,7 +10,8 @@ Unipath
 django-simple-history
 django-crispy-forms
 fake-factory
-
+pandas
+django-braces
 git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
 git+https://github.com/botswana-harvard/edc-templates@develop#egg=edc_templates

@@ -9,8 +9,8 @@ def edc_configure_callback(sender, **kwargs):
 
 
 class TshipidiPlusAppConfig(AppConfig):
-    name = 'bcpp_interview'
-    verbose_name = 'BCPP Interview'
+    name = 'tshipidi_plus'
+    verbose_name = 'Tshipidi Plus'
 
     def ready(self):
         post_migrate.connect(edc_configure_callback, sender=self)

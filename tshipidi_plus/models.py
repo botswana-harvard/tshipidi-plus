@@ -14,6 +14,8 @@ from edc_constants.choices import GENDER
 from edc_locator.models import LocatorMixin
 
 from registration.models import RegisteredSubject
+from django.db.models.signals import post_save
+from django.dispatch.dispatcher import receiver
 
 
 class SubjectConsent(BaseConsent, IdentityFieldsMixin, ReviewFieldsMixin,
@@ -52,6 +54,7 @@ class SubjectConsent(BaseConsent, IdentityFieldsMixin, ReviewFieldsMixin,
 
     class Meta:
         app_label = 'tshipidi_plus'
+        verbose_name = 'Subject Consent'
         get_latest_by = 'consent_datetime'
         unique_together = (('first_name', 'dob', 'initials', 'version'), )
         ordering = ('created', )
@@ -115,6 +118,7 @@ class TshipidiSubject(BaseUuidModel):
 
     class Meta:
         app_label = 'tshipidi_plus'
+        verbose_name = 'Tshipidi Subject'
 
 
 class SubjectLocator(LocatorMixin, CallLogLocatorMixin, BaseUuidModel):
@@ -128,3 +132,13 @@ class SubjectLocator(LocatorMixin, CallLogLocatorMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'tshipidi_plus'
+        verbose_name = 'Subject Locator'
+
+
+@receiver(post_save, sender=SubjectConsent, dispatch_uid='post_save_consented')
+def post_save_consented(sender, instance, raw, created, using, update_fields, **kwargs):
+    if not raw:
+        tshipidi_subject = TshipidiSubject.objects.get(identity=instance.identity)
+        tshipidi_subject.consented = True
+        tshipidi_subject.subject_consent = instance
+        tshipidi_subject.save(update_fields=['consented', 'subject_consent', 'user_modified', 'modified'])

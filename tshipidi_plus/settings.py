@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+from datetime import datetime
 from unipath import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'simple_history',
+    'crispy_forms',
     'django_crypto_fields',
     'django_revision',
+    'edc_content_type_map',
     'edc_consent',
     'edc_identifier',
     'registration',
@@ -57,6 +60,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'tshipidi_plus.urls'
@@ -135,3 +139,6 @@ SHOW_CRYPTO_FORM_DATA = True
 DEVICE_ID = '11'
 SERVER_DEVICE_ID_LIST = ['99']
 PROJECT_IDENTIFIER_PREFIX = '038'
+PROJECT_TITLE = 'Tshipidi Plus'
+STUDY_OPEN_DATETIME = datetime(2016, 5, 25)
+INSTITUTION = 'Botswana-Harvard AIDS Institute Partnership'
