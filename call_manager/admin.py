@@ -6,7 +6,8 @@ from simple_history.admin import SimpleHistoryAdmin
 from edc_base.modeladmin.mixins import (
     ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin, ModelAdminModelRedirectMixin,
-    ModelAdminChangelistModelButtonMixin)
+    # ModelAdminChangelistModelButtonMixin,
+    ModelAdminChangelistButtonMixin)
 from edc_call_manager.admin import (
     ModelAdminCallMixin, ModelAdminLogMixin, ModelAdminLogEntryMixin,
     ModelAdminLogEntryInlineMixin, call_manager_admin)
@@ -27,8 +28,8 @@ class ModelAdminStackedInlineMixin(ModelAdminAuditFieldsMixin, StackedInline):
 
 @admin.register(Call, site=call_manager_admin)
 class CallAdmin(BaseModelAdmin, ModelAdminCallMixin,
-                # ModelAdminChangelistButtonMixin,
-                ModelAdminChangelistModelButtonMixin,
+                ModelAdminChangelistButtonMixin,
+                # ModelAdminChangelistModelButtonMixin,
                 SimpleHistoryAdmin):
 
     mixin_list_display = None
@@ -37,14 +38,26 @@ class CallAdmin(BaseModelAdmin, ModelAdminCallMixin,
         'subject_identifier',
         'call_button',
         'call_attempts',
-        'call_status',
+        'call_outcome',
         'scheduled',
         'label',
         'first_name',
         'initials',
-        'call_outcome',
         'user_created',
     )
+
+    def call_button(self, obj):
+        log = Log.objects.get(call=obj)
+        if obj.call_status == NEW:
+            change_label = 'New&nbsp;Call'.format(obj.call_attempts)
+        elif obj.call_status == OPEN:
+            change_label = 'Open&nbsp;Call'.format(obj.call_attempts)
+        else:
+            change_label = 'Closed&nbsp;Call'
+        return self.change_button(
+            'call-subject-add', ('tshipidi_plus', 'tshipidisubject', str(log.pk), ),
+            label=change_label, namespace='call_manager')
+    call_button.short_description = 'call'
 
 #     def call_button(self, obj):
 #         log = Log.objects.get(call=obj)
@@ -54,23 +67,10 @@ class CallAdmin(BaseModelAdmin, ModelAdminCallMixin,
 #             change_label = 'Call'.format(obj.call_attempts)
 #         else:
 #             return 'Closed'
-#         return self.change_button(
-#             'call_subject', (log._meta.app_label, log._meta.object_name.lower(), str(log.pk)),
-#             label=change_label)
+#         return self.changelist_model_button(
+#             'call_manager', 'log', (log.pk, ), namespace='call_manager_admin',
+#             change_label=change_label)
 #     call_button.short_description = 'call'
-
-    def call_button(self, obj):
-        log = Log.objects.get(call=obj)
-        if obj.call_status == NEW:
-            change_label = 'Call'.format(obj.call_attempts)
-        elif obj.call_status == OPEN:
-            change_label = 'Call'.format(obj.call_attempts)
-        else:
-            return 'Closed'
-        return self.changelist_model_button(
-            'call_manager', 'log', (log.pk, ), namespace='call_manager_admin',
-            change_label=change_label)
-    call_button.short_description = 'call'
 
 
 class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInlineMixin):

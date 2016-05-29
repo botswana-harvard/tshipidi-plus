@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_crypto_fields',
     'django_revision',
     'edc_content_type_map',
+    'edc_call_manager',
     'edc_consent',
     'edc_identifier',
     'registration',
@@ -142,3 +143,4 @@ PROJECT_IDENTIFIER_PREFIX = '038'
 PROJECT_TITLE = 'Tshipidi Plus'
 STUDY_OPEN_DATETIME = datetime(2016, 5, 25)
 INSTITUTION = 'Botswana-Harvard AIDS Institute Partnership'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

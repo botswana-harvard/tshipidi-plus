@@ -1,13 +1,22 @@
 from django import forms
-from .models import SubjectConsent
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+
+from .models import TshipidiSubject, SubjectConsent
 
 
 class SubjectConsentForm(forms.ModelForm):
 
     class Meta:
         model = SubjectConsent
+        fields = '__all__'
+
+
+class TshipidiSubjectForm(forms.ModelForm):
+
+    class Meta:
+        model = TshipidiSubject
         fields = '__all__'
 
 

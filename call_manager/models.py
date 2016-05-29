@@ -23,6 +23,10 @@ class Call(CallModelMixin, BaseUuidModel):
     def __str__(self):
         return self.subject_identifier
 
+    @property
+    def subject(self):
+        return self.tshipidi_subject
+
     class Meta:
         app_label = 'call_manager'
 

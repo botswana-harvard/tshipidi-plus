@@ -24,30 +24,22 @@ from .views import (
     HomeView, StatisticsView, LoginView, LogoutView)
 from django.views.generic.base import RedirectView
 
-from .views import CallSubjectView
 
 urlpatterns = [
-    url(r'^admin/logout/', LogoutView.as_view(url='/login/')),
-    url(r'^login/', LoginView.as_view(), name='login_url'),
-    url(r'^logout/', LogoutView.as_view(url='/login/'), name='logout_url'),
-    url(r'^accounts/login/', LoginView.as_view()),
-    url(r'^home/', HomeView.as_view(), name='home'),
+    url(r'login', LoginView.as_view(), name='login_url'),
+    url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^statistics/', StatisticsView.as_view(), name='update-statistics'),
-    url(r'^call_manager/$', RedirectView.as_view(url='/')),
-    url(r'^call_manager/(?P<app_label>\w+)/(?P<model_name>\w+)/(?P<pk>[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12})/',
-        CallSubjectView.as_view(), name='call_subject'),
-    url(r'^call_manager/(?P<app_label>\w+)/(?P<model_name>\w+)/',
-        CallSubjectView.as_view(), name='call_subject'),
-    url(r'^call_manager/', include('edc_call_manager.urls')),
-    url(r'^encryption/$', RedirectView.as_view(url='/')),
-    url(r'^encryption/', encryption_admin.urls),
-    url(r'^admin/reg/$', RedirectView.as_view(url='/')),
-    url(r'^admin/reg/', registration_admin.urls),
-    url(r'^admin/cm/$', RedirectView.as_view(url='/')),
-    url(r'^admin/cm/', call_manager_admin.urls),
+    url(r'^call_manager/$', RedirectView.as_view(pattern_name='home')),
+    url(r'^call_manager/', include('edc_call_manager.urls', 'call_manager')),
     url(r'^admin/$', RedirectView.as_view(url='/')),
+    # url(r'^admin/logout/', RedirectView.as_view(pattern_name='login_url')),
+    # url(r'^accounts/login/', RedirectView.as_view(pattern_name='login_url')),
     url(r'^admin/', admin.site.urls),
-    url(r'', HomeView.as_view(), name='default'),
+    url(r'^admin/', call_manager_admin.urls),
+    url(r'^admin/', registration_admin.urls),
+    url(r'^admin/', encryption_admin.urls),
+    url(r'^home/', HomeView.as_view(), name='home'),
+    url(r'^', HomeView.as_view(), name='home'),
 ]
 
 admin.site.site_header = 'Tshipidi Plus'
