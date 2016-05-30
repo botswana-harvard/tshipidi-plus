@@ -10,7 +10,7 @@ from .models import Call, Log, LogEntry
 class TshipidiSubjectModelCaller(ModelCaller):
     call_model = (Call, 'tshipidi_subject')
     label = 'subjects'
-    locator_model = (SubjectLocator, 'tshipidi_subject')
+    locator_model = (SubjectLocator, 'tshipidi_subject__subject_identifier')
     log_entry_model = LogEntry
     log_model = Log
     unscheduling_model = SubjectConsent
